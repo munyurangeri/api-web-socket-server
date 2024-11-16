@@ -19,5 +19,9 @@
     "http-status": "^2.0.0",
     "winston": "^3.17.0",
     "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0",
+    "vitest": "^2.1.5"
   }
 }
