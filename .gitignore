@@ -1,0 +1,50 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+
+# Cache
+.cache/
+.vscode/
+.DS_Store
+*.swp
+*.swo
+*.bak
+
+# System files
+Thumbs.db
+*.log
+
+# Coverage files
+coverage/
+
+# Temp files
+tmp/
+temp/
+
+# IDE-specific files
+.idea/
+*.iml
+
+# Deployment
+.ssh/
