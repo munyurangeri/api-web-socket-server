@@ -6,7 +6,7 @@ export const requestLogger = (req, res, next) => {
   next();
 };
 
-export const errorLogger = (err, req, res, next) => {
+export const errorLogger = (err, req, res) => {
   logger.error(err.message);
   res
     .status(status.INTERNAL_SERVER_ERROR)

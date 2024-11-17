@@ -7,7 +7,7 @@ export function initializeWebSocket(server) {
 
   wss.on("connection", (socket) => {
     console.log("client connected");
-    socket.on("message", (message) => {});
+    socket.on("message", () => {});
 
     socket.on("close", () => {
       console.log("client disconnected");
