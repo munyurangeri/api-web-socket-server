@@ -31,7 +31,7 @@ describe("API", () => {
         .get("/api/users")
         .query({ _page: 1, _per_page: 1, _search: "dupond dupont" });
 
-      console.log(response.body);
+      // console.log(response.body);
 
       expect(response.status).toBe(status.OK);
       expect(response.body.next).toBe(2);
