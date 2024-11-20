@@ -32,7 +32,8 @@ describe("User domain", () => {
 
   describe("Service", () => {
     const repoMock = createRepositoryMock(vi);
-    const { create } = createUserService(repoMock);
+    const { create, findById, findAll, findAndUpdate, remove } =
+      createUserService(repoMock);
 
     it("should add/create and return a USER object", async () => {
       const userObj = fakeValidUser();
@@ -46,10 +47,12 @@ describe("User domain", () => {
       expect(repoMock.generateId).toHaveBeenCalledWith(userObj);
       expect(result).toEqual(expectedUser);
     });
+
+    // TODO: Test findById, findAll, findAndUpdate and remove functions
   });
 });
 
-function fakeValidUser() {
+export function fakeValidUser() {
   return {
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
@@ -59,6 +62,6 @@ function fakeValidUser() {
   };
 }
 
-function fakeInvalidUser() {
+export function fakeInvalidUser() {
   return {};
 }
