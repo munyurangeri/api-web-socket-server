@@ -17,6 +17,16 @@ const createUserController = (Repository) => ({
     res.status(status.OK).json(result);
   },
 
+  async getUserById(req, res, next) {
+    const { findById } = Repository;
+    const { id } = req.params;
+    const [error, user] = await flatPromise(findById(id));
+
+    if (error) return next(error);
+
+    res.status(status.OK).json(user);
+  },
+
   async searchUsers(req, res, next) {
     const { search } = Repository;
     let { _search } = req.query;
@@ -34,6 +44,16 @@ const createUserController = (Repository) => ({
     if (error) return next(error);
 
     res.status(status.CREATED).json({ user: keysToSnakeCase(user) });
+  },
+
+  async removeUserById(req, res, next) {
+    const { remove } = Repository;
+    const { id } = req.params;
+    const [error] = await flatPromise(remove(id));
+
+    if (error) return next(error);
+
+    res.status(status.OK).json({ message: "user deleted" });
   },
 });
 
