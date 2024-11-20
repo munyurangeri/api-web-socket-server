@@ -10,7 +10,7 @@ const userSchema = Joi.object({
   createdAt: Joi.date().optional(),
 });
 
-const validateUser = (user) => {
+export function validateUser(user) {
   const { error, value } = userSchema.validate(user, { abortEarly: false });
 
   if (error) {
@@ -20,6 +20,18 @@ const validateUser = (user) => {
   }
 
   return Object.freeze(value);
-};
+}
 
-export default validateUser;
+export function createUserService(userRepository) {
+  const create = async (userData) => {
+    const user = userRepository.generateId(validateUser(userData));
+
+    await userRepository.save({ ...user, createdAt: new Date() });
+
+    return { ...user, createdAt: new Date() };
+  };
+  const findAll = async () => userRepository.findAll();
+  const findById = async (userId) => userRepository.findById(userId);
+
+  return { create, findAll, findById };
+}

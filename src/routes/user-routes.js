@@ -1,7 +1,7 @@
 import express from "express";
 import authorize from "../middleware/authorization.js";
 import createUserRepository from "../adaptors/in-memory-db/user.js";
-import createUserService from "../core/user/service.js";
+import { createUserService } from "../core/user.js";
 import createUserController from "../adaptors/http/users.js";
 
 const ROLES = ["guest"];
