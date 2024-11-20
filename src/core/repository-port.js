@@ -1,27 +1,28 @@
+/* eslint-disable no-unused-vars */
 export default function createRepositoryPort() {
   return {
-    generateId(data) {
+    generateId(_data) {
       throw new Error("generateId() not implemented");
     },
 
-    save(data) {
+    save(_data) {
       return Promise.reject(new Error("save() not implemented"));
     },
 
-    findById(id) {
+    findById(_id) {
       return Promise.reject(new Error("findById() not implemented"));
     },
 
     findAll() {
       return Promise.reject(new Error("findAll() not implemented"));
     },
-    update(id, data) {
+    update(_id, _data) {
       return Promise.reject(new Error("update() not implemented"));
     },
-    remove(id) {
+    remove(_id) {
       return Promise.reject(new Error("remove() not implemented"));
     },
-    search(query) {
+    search(_query) {
       return Promise.reject(new Error("search() not implemented"));
     },
   };

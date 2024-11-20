@@ -32,6 +32,7 @@ describe("User domain", () => {
 
   describe("Service", () => {
     const repoMock = createRepositoryMock(vi);
+    // eslint-disable-next-line no-unused-vars
     const { create, findById, findAll, findAndUpdate, remove } =
       createUserService(repoMock);
 

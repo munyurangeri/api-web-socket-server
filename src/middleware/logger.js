@@ -1,13 +1,14 @@
+/* eslint-disable no-unused-vars */
 import status from "http-status";
 import logger from "../utils/logger.js";
 import { toSnakeCase } from "../utils/convert-case.js";
 
-export const requestLogger = (req, res, next) => {
+export const requestLogger = (req, _res, next) => {
   logger.info(`${new Date().toISOString()}: ${req.method} ${req.url}`);
   next();
 };
 
-export const errorLogger = (err, req, res, next) => {
+export const errorLogger = (err, _req, res, _next) => {
   logger.error(err.message);
 
   if (err.message.startsWith("Validation"))
