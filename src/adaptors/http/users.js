@@ -1,44 +1,39 @@
 import status from "http-status";
 import { keysToCamelCase, keysToSnakeCase } from "../../utils/convert-case.js";
+import { flatPromise, paginate } from "./helpers.js";
 
-const createUserController = ({ create, findAll }) => ({
+const createUserController = (Repository) => ({
   async getAllUsers(req, res) {
-    let { _page, _per_page, _search = "" } = req.query;
+    const { findAll } = Repository;
+    let { _page, _per_page } = req.query;
+    const data = await findAll();
 
-    if (_search) {
-      // TODO: Implement searching/filter and send result as response!
-      console.log(`searching ${_search}...`);
-    }
+    if (!_page) return res.status(status.OK).json(data);
 
     _page = parseInt(_page) || 1;
     _per_page = parseInt(_per_page) || 20;
+    const result = paginate(_page, _per_page, data);
 
-    const start = (_page - 1) * _per_page;
-    const end = start + _per_page;
+    res.status(status.OK).json(result);
+  },
 
-    const data = await findAll();
-    const sliced = data.slice(start, end);
-    const totalItems = data.length;
+  async searchUsers(req, res, next) {
+    const { search } = Repository;
+    let { _search } = req.query;
+    const [error, users] = await flatPromise(search(_search));
 
-    res.status(status.OK).json({
-      page: _page,
-      per_page: _per_page,
-      next: end < totalItems ? _page + 1 : null,
-      previous: _page - 1 >= 1 ? _page - 1 : null,
-      first: totalItems ? 1 : null,
-      last: Math.ceil(totalItems / _per_page),
-      items: totalItems,
-      data: sliced,
-    });
+    if (error) return next(error);
+
+    res.status(status.OK).json(users);
   },
 
   async addUser(req, res, next) {
-    try {
-      const user = await create(keysToCamelCase(req.body));
-      res.status(status.CREATED).json({ user: keysToSnakeCase(user) });
-    } catch (error) {
-      next(error);
-    }
+    const { create } = Repository;
+    const [error, user] = await flatPromise(create(keysToCamelCase(req.body)));
+
+    if (error) return next(error);
+
+    res.status(status.CREATED).json({ user: keysToSnakeCase(user) });
   },
 });
 
