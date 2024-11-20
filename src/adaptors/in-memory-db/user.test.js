@@ -1,17 +1,12 @@
 import { describe, expect, it } from "vitest";
 import createUserRepository from "./user";
 import { keysToSnakeCase } from "../../utils/convert-case";
+import { fakeInvalidUser, fakeValidUser } from "../../core/user.test";
 
 describe("In-memory-db adaptor", () => {
   it("should generate and save USER with ID if all required fields are provided and valid", async () => {
     const { generateId, save } = createUserRepository();
-    const data = {
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@adaptor.com",
-      city: "New York",
-      country: "USA",
-    };
+    const data = fakeValidUser();
 
     const user = generateId(data);
 
@@ -21,33 +16,21 @@ describe("In-memory-db adaptor", () => {
 
   it("should NOT generate USER with ID but THROW if User data NOT valid", () => {
     const { generateId } = createUserRepository();
-    const data = { firstName: "J", email: "john.doe" };
+    const data = fakeInvalidUser();
 
     expect(() => generateId(data)).toThrow(/Validation errors/);
   });
 
   it("should NOT save USER but THROW if User ID is missing", async () => {
     const { save } = createUserRepository();
-    const data = {
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@adaptor.com",
-      city: "New York",
-      country: "USA",
-    };
+    const data = fakeValidUser();
 
     await expect(save(data)).rejects.toThrow(/Validation/);
   });
 
   it("should return User with ID equal to '1'", async () => {
     const { generateId, save, findById } = createUserRepository();
-    const data = {
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@adaptor.com",
-      city: "New York",
-      country: "USA",
-    };
+    const data = fakeValidUser();
 
     const user = generateId(data);
     await save(user);
@@ -57,13 +40,7 @@ describe("In-memory-db adaptor", () => {
 
   it("should return any array of Users of length of 1", async () => {
     const { generateId, save, findAll } = createUserRepository();
-    const data = {
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@adaptor.com",
-      city: "New York",
-      country: "USA",
-    };
+    const data = fakeValidUser();
 
     const user = generateId(data);
     const expected = [keysToSnakeCase(user)];

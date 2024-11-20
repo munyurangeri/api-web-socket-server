@@ -27,11 +27,28 @@ export default function createUserRepository() {
     return Array.from(users.values());
   };
 
+  const search = async (query) => {
+    return Array.from(users.values()).filter((el) => {
+      return (
+        el.first_name?.includes(query) ||
+        el.last_name?.includes(query) ||
+        el.city?.includes(query) ||
+        el.country?.includes(query)
+      );
+    });
+  };
+
+  const remove = async (userId) => {
+    users.delete(userId);
+  };
+
   return {
     ...createRepositoryPort(),
     generateId,
     save,
     findById,
     findAll,
+    remove,
+    search,
   };
 }

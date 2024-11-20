@@ -30,8 +30,35 @@ export function createUserService(userRepository) {
 
     return { ...user, createdAt: new Date() };
   };
-  const findAll = async () => userRepository.findAll();
-  const findById = async (userId) => userRepository.findById(userId);
 
-  return { create, findAll, findById };
+  const findAll = async () => userRepository.findAll();
+
+  const findById = async (userId) => {
+    if (!userId) throw new Error('Validation error: no "id"');
+
+    return userRepository.findById(userId);
+  };
+
+  const findAndUpdate = async (userId, userUpdates) => {
+    if (!userId) throw new Error('Validation error: no "id"');
+
+    const { id } = await userRepository.findById(userId);
+
+    if (id) return userRepository.update(id, userUpdates);
+
+    throw new Error("Validation error: user not found");
+  };
+
+  const remove = async (userId) => {
+    if (!userId) throw new Error('Validation error: no "id"');
+    return userRepository.remove(userId);
+  };
+
+  const search = async (query) => {
+    if (!query) throw new Error('Validation error: empty "_search"');
+
+    return userRepository.search(query);
+  };
+
+  return { create, findAll, findById, findAndUpdate, remove, search };
 }
