@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { BadRequestError, NotFoundError } from "../http-errors";
+import { BadRequestError, NotFoundError } from "../utils/http-errors";
 import { toSnakeCase } from "../utils/convert-case";
 
 const userSchema = Joi.object({
