@@ -1,7 +1,7 @@
 import createRepositoryPort from "../../core/repository-port";
 import { validateUser } from "../../core/user";
 import { keysToSnakeCase } from "../../utils/convert-case";
-import { BadRequestError } from "../../http-errors";
+import { BadRequestError } from "../../utils/http-errors";
 
 export default function createUserRepository() {
   const users = new Map();
@@ -43,6 +43,11 @@ export default function createUserRepository() {
     users.delete(userId);
   };
 
+  const emptyDB = async () => {
+    users.clear();
+    idCounter = 0;
+  };
+
   return {
     ...createRepositoryPort(),
     generateId,
@@ -51,5 +56,6 @@ export default function createUserRepository() {
     findAll,
     remove,
     search,
+    emptyDB,
   };
 }

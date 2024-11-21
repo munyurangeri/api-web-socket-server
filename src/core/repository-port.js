@@ -25,6 +25,9 @@ export default function createRepositoryPort() {
     search(_query) {
       return Promise.reject(new Error("search() not implemented"));
     },
+    emptyDB() {
+      return Promise.reject(new Error("emptyDB() not implemented"));
+    },
   };
 }
 
@@ -37,5 +40,6 @@ export function createRepositoryMock(mock) {
     update: mock.fn(),
     remove: mock.fn(),
     search: mock.fn(),
+    emptyDB: mock.fn(),
   };
 }

@@ -1,11 +1,14 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import createUserRepository from "./user";
 import { keysToSnakeCase } from "../../utils/convert-case";
 import { fakeValidUser, fakeInvalidUser } from "../../utils/fakers";
 
-describe("In-memory-db adaptor", () => {
+describe("In-memory-db Adaptor", () => {
+  const { generateId, save, emptyDB } = createUserRepository();
+
+  beforeEach(async () => await emptyDB());
+
   it("should generate and save USER with ID if all required fields are provided and valid", async () => {
-    const { generateId, save } = createUserRepository();
     const data = fakeValidUser();
 
     const user = generateId(data);
