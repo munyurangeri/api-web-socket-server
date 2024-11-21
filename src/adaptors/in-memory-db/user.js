@@ -1,6 +1,7 @@
 import createRepositoryPort from "../../core/repository-port";
 import { validateUser } from "../../core/user";
 import { keysToSnakeCase } from "../../utils/convert-case";
+import { BadRequestError } from "../../http-errors";
 
 export default function createUserRepository() {
   const users = new Map();
@@ -14,7 +15,7 @@ export default function createUserRepository() {
   const save = async (user) => {
     const data = validateUser(user);
 
-    if (!data.id) throw new Error('Validation error: "id" is required');
+    if (!data.id) throw new BadRequestError();
 
     users.set(data.id, keysToSnakeCase(data));
   };

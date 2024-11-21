@@ -18,14 +18,14 @@ describe("In-memory-db adaptor", () => {
     const { generateId } = createUserRepository();
     const data = fakeInvalidUser();
 
-    expect(() => generateId(data)).toThrow(/Validation errors/);
+    expect(() => generateId(data)).toThrow();
   });
 
   it("should NOT save USER but THROW if User ID is missing", async () => {
     const { save } = createUserRepository();
     const data = fakeValidUser();
 
-    await expect(save(data)).rejects.toThrow(/Validation/);
+    await expect(save(data)).rejects.toThrow();
   });
 
   it("should return User with ID equal to '1'", async () => {

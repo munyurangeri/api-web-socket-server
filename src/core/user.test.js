@@ -17,7 +17,7 @@ describe("User domain", () => {
 
     it("should throw error if any of required field is not provided nor valid", () => {
       expect(() => validateUser(fakeInvalidUser())).toThrow(
-        /Validation errors/
+        
       );
     });
 

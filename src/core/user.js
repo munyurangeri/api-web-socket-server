@@ -1,4 +1,6 @@
 import Joi from "joi";
+import { BadRequestError, NotFoundError } from "../http-errors";
+import { toSnakeCase } from "../utils/convert-case";
 
 const userSchema = Joi.object({
   id: Joi.string().optional(),
@@ -14,9 +16,9 @@ export function validateUser(user) {
   const { error, value } = userSchema.validate(user, { abortEarly: false });
 
   if (error) {
-    const messages = error.details.map((detail) => detail.message);
+    const messages = error.details.map((detail) => toSnakeCase(detail.message));
 
-    throw new Error(`Validation errors: ${messages.join(",")}`);
+    throw new BadRequestError("Invalid user object", `${messages.join(",")}`);
   }
 
   return Object.freeze(value);
@@ -34,28 +36,28 @@ export function createUserService(userRepository) {
   const findAll = async () => userRepository.findAll();
 
   const findById = async (userId) => {
-    if (!userId) throw new Error('Validation error: no "id"');
+    if (!userId) throw new NotFoundError("User");
 
     return userRepository.findById(userId);
   };
 
   const findAndUpdate = async (userId, userUpdates) => {
-    if (!userId) throw new Error('Validation error: no "id"');
+    if (!userId) throw new BadRequestError();
 
     const { id } = await userRepository.findById(userId);
 
     if (id) return userRepository.update(id, userUpdates);
 
-    throw new Error("Validation error: user not found");
+    throw new NotFoundError("User");
   };
 
   const remove = async (userId) => {
-    if (!userId) throw new Error('Validation error: no "id"');
+    if (!userId) throw new BadRequestError();
     return userRepository.remove(userId);
   };
 
   const search = async (query) => {
-    if (!query) throw new Error('Validation error: empty "_search"');
+    if (!query) throw new BadRequestError();
 
     return userRepository.search(query);
   };
