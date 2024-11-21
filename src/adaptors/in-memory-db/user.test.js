@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import createUserRepository from "./user";
 import { keysToSnakeCase } from "../../utils/convert-case";
-import { fakeInvalidUser, fakeValidUser } from "../../core/user.test";
+import { fakeValidUser, fakeInvalidUser } from "../../utils/fakers";
 
 describe("In-memory-db adaptor", () => {
   it("should generate and save USER with ID if all required fields are provided and valid", async () => {

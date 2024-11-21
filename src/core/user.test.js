@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { faker } from "@faker-js/faker";
-import { validateUser, createUserService } from "./user";
+import { fakeValidUser, fakeInvalidUser } from "../utils/fakers";
+import { validateUser, createUser } from "./user";
 import { createRepositoryMock } from "./repository-port";
 
-describe("User domain", () => {
+describe("User", () => {
   afterEach(() => vi.restoreAllMocks());
 
-  describe("Model", () => {
+  describe("Validate", () => {
     it("should validate User object and return it frozen IF valid", () => {
       const userObj = fakeValidUser();
 
@@ -16,9 +16,7 @@ describe("User domain", () => {
     });
 
     it("should throw error if any of required field is not provided nor valid", () => {
-      expect(() => validateUser(fakeInvalidUser())).toThrow(
-        
-      );
+      expect(() => validateUser(fakeInvalidUser())).toThrow();
     });
 
     it("should throw error if you you mutate any user property", () => {
@@ -30,11 +28,11 @@ describe("User domain", () => {
     });
   });
 
-  describe("Service", () => {
+  describe("Create", () => {
     const repoMock = createRepositoryMock(vi);
     // eslint-disable-next-line no-unused-vars
     const { create, findById, findAll, findAndUpdate, remove } =
-      createUserService(repoMock);
+      createUser(repoMock);
 
     it("should add/create and return a USER object", async () => {
       const userObj = fakeValidUser();
@@ -52,17 +50,3 @@ describe("User domain", () => {
     // TODO: Test findById, findAll, findAndUpdate and remove functions
   });
 });
-
-export function fakeValidUser() {
-  return {
-    firstName: faker.person.firstName(),
-    lastName: faker.person.lastName(),
-    email: faker.internet.email(),
-    city: faker.location.city(),
-    country: faker.location.country(),
-  };
-}
-
-export function fakeInvalidUser() {
-  return {};
-}

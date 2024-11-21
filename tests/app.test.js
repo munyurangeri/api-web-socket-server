@@ -2,13 +2,14 @@ import request from "supertest";
 import status from "http-status";
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import app from "../src/app";
-import { fakeValidUser, fakeInvalidUser } from "../src/core/user.test";
+import { fakeValidUser, fakeInvalidUser } from "../src/utils/fakers";
 import { keysToSnakeCase } from "../src/utils/convert-case";
 
 const TEST_SERVER_PORT = 3500;
 
 describe("API", () => {
   let server;
+
   beforeEach(() => {
     server = app.listen(TEST_SERVER_PORT);
   });
@@ -16,7 +17,7 @@ describe("API", () => {
   afterEach(() => server.close());
 
   describe("Users API routes", () => {
-    describe("Add/Delete USER", () => {
+    describe("Create and Delete", () => {
       it("should add a new user", async () => {
         const data = keysToSnakeCase(fakeValidUser());
 
@@ -47,7 +48,7 @@ describe("API", () => {
       });
     });
 
-    describe("Get users", () => {
+    describe("Get", () => {
       it("should return all users", async () => {
         const data = keysToSnakeCase(fakeValidUser());
         await request(app).post("/api/users").send(data);
@@ -78,7 +79,7 @@ describe("API", () => {
       });
     });
 
-    describe("Search users", () => {
+    describe("Search", () => {
       it("should return found users", async () => {
         const data = keysToSnakeCase(fakeValidUser());
         await request(app).post("/api/users").send(data);
