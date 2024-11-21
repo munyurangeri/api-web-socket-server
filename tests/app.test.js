@@ -1,22 +1,56 @@
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import request from "supertest";
 import status from "http-status";
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import app from "../src/app";
 import { fakeValidUser, fakeInvalidUser } from "../src/utils/fakers";
 import { keysToSnakeCase } from "../src/utils/convert-case";
+// import createUserRepository from "../src/adaptors/in-memory-db/user";
 
 const TEST_SERVER_PORT = 3500;
 
 describe("API", () => {
   let server;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     server = app.listen(TEST_SERVER_PORT);
   });
 
-  afterEach(() => server.close());
+  afterEach(async () => {
+    server.close();
+  });
 
   describe("Users API routes", () => {
+    describe("Get", () => {
+      it("should return user with ID '1'", async () => {
+        const data = keysToSnakeCase(fakeValidUser());
+        await request(app).post("/api/users").send(data);
+
+        const response = await request(server).get("/api/users/1");
+
+        expect(response.status).toBe(status.OK);
+        expect(response.body.id).toBe("1");
+      });
+
+      it("should return all users", async () => {
+        const data = keysToSnakeCase(fakeValidUser());
+        await request(app).post("/api/users").send(data);
+        for (let i = 0; i < 9; i++)
+          await request(app)
+            .post("/api/users")
+            .send(keysToSnakeCase(fakeValidUser()));
+
+        const response = await request(server)
+          .get("/api/users")
+          .query({ _page: 1, _per_page: 1 });
+
+        expect(response.status).toBe(status.OK);
+        expect(response.body.next).toBe(2);
+        Object.keys(data).forEach((key) => {
+          expect(response.body.data[0]).toHaveProperty(key);
+        });
+      });
+    });
+
     describe("Create and Delete", () => {
       it("should add a new user", async () => {
         const data = keysToSnakeCase(fakeValidUser());
@@ -38,44 +72,13 @@ describe("API", () => {
         expect(response.body.message).toContain('"first_name"');
       });
 
-      it("should delete USER with ID '100", async () => {
+      it("should delete USER with ID '1", async () => {
         const data = keysToSnakeCase(fakeValidUser());
         await request(app).post("/api/users").send(data);
 
-        const response = await request(server).delete("/api/users/100");
+        const response = await request(server).delete("/api/users/1");
 
         expect(response.status).toBe(status.OK);
-      });
-    });
-
-    describe("Get", () => {
-      it("should return all users", async () => {
-        const data = keysToSnakeCase(fakeValidUser());
-        await request(app).post("/api/users").send(data);
-        for (let i = 0; i < 9; i++)
-          await request(app)
-            .post("/api/users")
-            .send(keysToSnakeCase(fakeValidUser()));
-
-        const response = await request(server)
-          .get("/api/users")
-          .query({ _page: 1, _per_page: 1 });
-
-        expect(response.status).toBe(status.OK);
-        expect(response.body.next).toBe(2);
-        Object.keys(data).forEach((key) => {
-          expect(response.body.data[0]).toHaveProperty(key);
-        });
-      });
-
-      it("should return user with ID '1'", async () => {
-        const data = keysToSnakeCase(fakeValidUser());
-        await request(app).post("/api/users").send(data);
-
-        const response = await request(server).get("/api/users/1");
-
-        expect(response.status).toBe(status.OK);
-        expect(response.body.id).toBe("1");
       });
     });
 
