@@ -1,13 +1,13 @@
 import express from "express";
 import authorize from "../middleware/authorization.js";
 import createUserRepository from "../adaptors/in-memory-db/user.js";
-import { createUser } from "../core/user.js";
+import { createUserService } from "../core/user.js";
 import createUserController from "../adaptors/http/users.js";
 
 const ROLES = ["guest"];
 const router = express.Router();
 const userRepository = createUserRepository();
-const userService = createUser(userRepository);
+const userService = createUserService(userRepository);
 const { getAllUsers, getUserById, searchUsers, addUser, removeUserById } =
   createUserController(userService);
 
