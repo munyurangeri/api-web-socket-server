@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { fakeValidUser, fakeInvalidUser } from "../utils/fakers";
-import { validateUser, createUser } from "./user";
+import { validateUser, createUserService } from "./user";
 import { createRepositoryMock } from "./repository-port";
 
 describe("User", () => {
@@ -32,7 +32,7 @@ describe("User", () => {
     const repoMock = createRepositoryMock(vi);
     // eslint-disable-next-line no-unused-vars
     const { create, findById, findAll, findAndUpdate, remove } =
-      createUser(repoMock);
+      createUserService(repoMock);
 
     it("should add/create and return a USER object", async () => {
       const userObj = fakeValidUser();

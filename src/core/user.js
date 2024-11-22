@@ -24,7 +24,7 @@ export function validateUser(user) {
   return Object.freeze(value);
 }
 
-export function createUser(userRepository) {
+export function createUserService(userRepository) {
   const create = async (userData) => {
     const user = userRepository.generateId(validateUser(userData));
 
