@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { fakeValidUser, fakeInvalidUser } from "../utils/fakers";
-import { validateUser, createUserService } from "./user";
+import { User, createUserService } from "./user";
 import { createRepositoryMock } from "./repository-port";
 
 describe("User", () => {
@@ -10,19 +10,19 @@ describe("User", () => {
     it("should validate User object and return it frozen IF valid", () => {
       const userObj = fakeValidUser();
 
-      const user = validateUser(userObj);
+      const user = User(userObj);
 
       expect(user).toEqual(userObj);
     });
 
     it("should throw error if any of required field is not provided nor valid", () => {
-      expect(() => validateUser(fakeInvalidUser())).toThrow();
+      expect(() => User(fakeInvalidUser())).toThrow();
     });
 
     it("should throw error if you you mutate any user property", () => {
       const userObj = fakeValidUser();
 
-      const user = validateUser(userObj);
+      const user = User(userObj);
 
       expect(() => (user.firstName = "Peter")).toThrow(/read only/);
     });

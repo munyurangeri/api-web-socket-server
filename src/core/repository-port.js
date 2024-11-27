@@ -31,7 +31,7 @@ export default function createRepositoryPort() {
   };
 }
 
-export function createRepositoryMock(mock) {
+export function createRepositoryMock(mock = isRequired()) {
   return {
     generateId: mock.fn(),
     save: mock.fn(),
@@ -42,4 +42,10 @@ export function createRepositoryMock(mock) {
     search: mock.fn(),
     emptyDB: mock.fn(),
   };
+}
+
+function isRequired() {
+  throw new Error(
+    "Mock object with fn function is required. Use vitest vi or jest"
+  );
 }

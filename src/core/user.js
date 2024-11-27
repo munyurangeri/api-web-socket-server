@@ -2,18 +2,20 @@ import Joi from "joi";
 import { BadRequestError, NotFoundError } from "../utils/http-errors";
 import { toSnakeCase } from "../utils/convert-case";
 
-const userSchema = Joi.object({
-  id: Joi.string().optional(),
-  firstName: Joi.string().min(3).max(255).required(),
-  lastName: Joi.string().min(3).max(255).required(),
-  email: Joi.string().email().required(),
-  city: Joi.string().required(),
-  country: Joi.string().required(),
-  createdAt: Joi.date().optional(),
+const { object, string, date } = Joi.types();
+
+const userSchema = object.keys({
+  id: string.optional(),
+  firstName: string.min(3).max(255).required(),
+  lastName: string.min(3).max(255).required(),
+  email: string.email().required(),
+  city: string.required(),
+  country: string.required(),
+  createdAt: date.optional(),
 });
 
-export function validateUser(user) {
-  const { error, value } = userSchema.validate(user, { abortEarly: false });
+export function User(userData) {
+  const { error, value } = userSchema.validate(userData, { abortEarly: false });
 
   if (error) {
     const messages = error.details.map((detail) => toSnakeCase(detail.message));
@@ -26,7 +28,7 @@ export function validateUser(user) {
 
 export function createUserService(userRepository) {
   const create = async (userData) => {
-    const user = userRepository.generateId(validateUser(userData));
+    const user = userRepository.generateId(User(userData));
 
     await userRepository.save({ ...user, createdAt: new Date() });
 

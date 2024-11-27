@@ -32,4 +32,6 @@ app.use((req, res) => {
   res.status(status.NOT_FOUND).json({ error: "Route not found" });
 });
 
+// TODO: Handle uncaugth errors
+
 export default app;

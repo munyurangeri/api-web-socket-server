@@ -4,9 +4,9 @@ import { keysToSnakeCase } from "../../utils/convert-case";
 import { fakeValidUser, fakeInvalidUser } from "../../utils/fakers";
 
 describe("In-memory-db Adaptor", () => {
-  const { generateId, save, emptyDB } = createUserRepository();
+  const { generateId, save, clear } = createUserRepository();
 
-  beforeEach(async () => await emptyDB());
+  beforeEach(async () => await clear());
 
   it("should generate and save USER with ID if all required fields are provided and valid", async () => {
     const data = fakeValidUser();

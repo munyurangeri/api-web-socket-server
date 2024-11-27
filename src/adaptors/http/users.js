@@ -2,9 +2,9 @@ import status from "http-status";
 import { keysToCamelCase, keysToSnakeCase } from "../../utils/convert-case.js";
 import { flatPromise, paginate } from "./helpers.js";
 
-const createUserController = (Repository) => ({
+const createUserController = (userService) => ({
   async getAllUsers(req, res) {
-    const { findAll } = Repository;
+    const { findAll } = userService;
     let { _page, _per_page } = req.query;
     const data = await findAll();
 
@@ -18,7 +18,7 @@ const createUserController = (Repository) => ({
   },
 
   async getUserById(req, res, next) {
-    const { findById } = Repository;
+    const { findById } = userService;
     const { id } = req.params;
     const [error, user] = await flatPromise(findById(id));
 
@@ -28,7 +28,7 @@ const createUserController = (Repository) => ({
   },
 
   async searchUsers(req, res, next) {
-    const { search } = Repository;
+    const { search } = userService;
     let { _search } = req.query;
     const [error, users] = await flatPromise(search(_search));
 
@@ -38,7 +38,7 @@ const createUserController = (Repository) => ({
   },
 
   async addUser(req, res, next) {
-    const { create } = Repository;
+    const { create } = userService;
     const [error, user] = await flatPromise(create(keysToCamelCase(req.body)));
 
     if (error) return next(error);
@@ -47,7 +47,7 @@ const createUserController = (Repository) => ({
   },
 
   async removeUserById(req, res, next) {
-    const { remove } = Repository;
+    const { remove } = userService;
     const { id } = req.params;
     const [error] = await flatPromise(remove(id));
 
