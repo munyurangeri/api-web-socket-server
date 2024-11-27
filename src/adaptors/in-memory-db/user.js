@@ -1,4 +1,4 @@
-import createRepositoryPort from "../../core/repository-port";
+import createRepositoryPort from "../../ports/repository-port";
 import { User } from "../../core/user";
 import { keysToSnakeCase } from "../../utils/convert-case";
 import { BadRequestError } from "../../../src/utils/http-errors";
