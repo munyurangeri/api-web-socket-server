@@ -1,7 +1,7 @@
 import createRepositoryPort from "../../core/ports/repository-port";
 import { createUser } from "../../core/user";
 import { keysToSnakeCase } from "../../utils/convert-case";
-import { BadRequestError } from "../../../src/utils/http-errors";
+import { BadRequestError } from "../../utils/app-errors";
 
 export default function createUserRepository() {
   const users = new Map();

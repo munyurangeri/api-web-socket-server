@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { BadRequestError, NotFoundError } from "../utils/http-errors";
+import { BadRequestError, NotFoundError } from "../utils/app-errors";
 import { toSnakeCase } from "../utils/convert-case";
 
 const { object, string, date } = Joi.types();
