@@ -1,28 +1,28 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { fakeValidUser, fakeInvalidUser } from "../utils/fakers";
-import { User, createUserService } from "./user";
-import { createRepositoryMock } from "./repository-port";
+import { createUser, createUserService } from "./user";
+import { createRepositoryMock } from "../core/ports/repository-port";
 
 describe("User", () => {
   afterEach(() => vi.restoreAllMocks());
 
-  describe("Validate", () => {
+  describe("createUser", () => {
     it("should validate User object and return it frozen IF valid", () => {
       const userObj = fakeValidUser();
 
-      const user = User(userObj);
+      const user = createUser(userObj);
 
       expect(user).toEqual(userObj);
     });
 
     it("should throw error if any of required field is not provided nor valid", () => {
-      expect(() => User(fakeInvalidUser())).toThrow();
+      expect(() => createUser(fakeInvalidUser())).toThrow();
     });
 
     it("should throw error if you you mutate any user property", () => {
       const userObj = fakeValidUser();
 
-      const user = User(userObj);
+      const user = createUser(userObj);
 
       expect(() => (user.firstName = "Peter")).toThrow(/read only/);
     });

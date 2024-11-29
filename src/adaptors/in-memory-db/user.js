@@ -1,5 +1,5 @@
-import createRepositoryPort from "../../ports/repository-port";
-import { User } from "../../core/user";
+import createRepositoryPort from "../../core/ports/repository-port";
+import { createUser } from "../../core/user";
 import { keysToSnakeCase } from "../../utils/convert-case";
 import { BadRequestError } from "../../../src/utils/http-errors";
 
@@ -9,11 +9,11 @@ export default function createUserRepository() {
 
   const generateId = (userData) => {
     const id = (++idCounter).toString();
-    return { ...User(userData), id };
+    return { ...createUser(userData), id };
   };
 
   const save = async (userData) => {
-    const user = User(userData);
+    const user = createUser(userData);
 
     if (!user.id) throw new BadRequestError();
 

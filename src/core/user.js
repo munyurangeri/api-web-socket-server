@@ -14,7 +14,7 @@ const userSchema = object.keys({
   createdAt: date.optional(),
 });
 
-export function User(userData) {
+export function createUser(userData) {
   const { error, value } = userSchema.validate(userData, { abortEarly: false });
 
   if (error) {
@@ -28,7 +28,7 @@ export function User(userData) {
 
 export function createUserService(userRepository) {
   const create = async (userData) => {
-    const user = userRepository.generateId(User(userData));
+    const user = userRepository.generateId(createUser(userData));
 
     await userRepository.save({ ...user, createdAt: new Date() });
 
