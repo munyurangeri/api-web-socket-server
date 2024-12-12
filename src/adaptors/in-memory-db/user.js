@@ -1,4 +1,3 @@
-import createRepositoryPort from "../../core/ports/repository-port";
 import { createUser } from "../../core/user";
 import { keysToSnakeCase } from "../../utils/convert-case";
 import { BadRequestError } from "../../utils/app-errors";
@@ -49,7 +48,6 @@ export default function createUserRepository() {
   };
 
   return {
-    ...createRepositoryPort(),
     generateId,
     save,
     findById,

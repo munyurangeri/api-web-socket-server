@@ -1,6 +1,7 @@
 import Joi from "joi";
 import { BadRequestError, NotFoundError } from "../utils/app-errors";
 import { toSnakeCase } from "../utils/convert-case";
+import createRepositoryPort from "./ports/repository-port";
 
 const { object, string, date } = Joi.types();
 
@@ -26,7 +27,7 @@ export function createUser(userData) {
   return Object.freeze(value);
 }
 
-export function createUserService(userRepository) {
+export function createUserService(userRepository = createRepositoryPort()) {
   const create = async (userData) => {
     const user = userRepository.generateId(createUser(userData));
 

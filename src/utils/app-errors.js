@@ -1,6 +1,6 @@
 export class AppError extends Error {
   constructor(
-    statusCode = 505,
+    statusCode = 500,
     message = "Internal server error",
     userMessage
   ) {
@@ -32,6 +32,6 @@ export class NotImplementedError extends AppError {
     message = "function is not implemented",
     userMessage = "Functionality is not available yet."
   ) {
-    super(500, message, userMessage);
+    super(501, message, userMessage);
   }
 }
